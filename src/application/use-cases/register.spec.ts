@@ -16,7 +16,6 @@ describe('Register Use Case', () => {
 
     expect(user.id).toEqual(expect.any(String));
   });
-
   it('should hash user password upon registration', async () => {
     const usersRepository = new InMemoryUsersRepository();
     const registerUseCase = new RegisterUseCase(usersRepository);
@@ -55,4 +54,16 @@ describe('Register Use Case', () => {
       }),
     ).rejects.toBeInstanceOf(Error);
   });
+});
+
+it('should not be able to register password with less characters 6', async () => {
+  const usersRepository = new InMemoryUsersRepository();
+  const registerUseCase = new RegisterUseCase(usersRepository);
+  expect(() =>
+    registerUseCase.execute({
+      name: 'John Doe',
+      email: 'john@example.com',
+      password: '12345',
+    }),
+  ).rejects.toBeInstanceOf(Error);
 });
